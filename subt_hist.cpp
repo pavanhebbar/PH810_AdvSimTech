@@ -1,0 +1,45 @@
+#include <iostream>
+#include <fstream>
+
+int subt_hist()
+{
+	ifstream infile1("bkg.txt");
+	ifstream infile2("bkg_sig.txt");
+	float back[1000000];
+	float back_sig[1050000];
+	float random;
+	for(int i = 0; i < 1050000; i++)
+	{
+		infile2 >> random >> back_sig[i];
+	}
+	cout << back_sig[1049999] << endl;
+	for (int i = 0; i < 1000000; i++)
+	{
+	        infile1 >> random >> back[i];
+	}
+
+	TCanvas *c1 = new TCanvas("c1", "c1", 500, 500);
+	TH1F *h1 = new TH1F("h1", "Background", 100, 0., 100);
+	for(int i = 0; i < 1000000; i++)
+	{
+		float x = back[i];
+		h1->Fill(x);
+	}
+	h1->Draw();
+
+	TCanvas *c2 = new TCanvas("c2", "c2", 500, 500);
+	TH1F *h2 = new TH1F("h2", "Back with sig", 100, 0., 100);
+	for(int i = 0; i < 1050000; i++)
+	{
+		float x = back_sig[i];
+		cout << x << endl;
+		h2->Fill(x);
+	}
+	h2->Draw();
+
+	TCanvas *c3 = new TCanvas("c3", "c3", 500, 500);
+	h2->Add(h1, -1);
+	h2->Draw();
+	return 1;
+
+}
